@@ -44,8 +44,11 @@ fun Route.bookRoutes() {
         }
 
         delete("/{id}") {
-            val bookIdQuery = call.parameters["id"] ?: "Please provide a valid id"
-            bookIdQuery.toIntOrNull()?.let { it1 -> bookService.deleteBook(it1) }
+            val bookIdQuery = call.parameters["id"] ?: kotlin.run {
+                throw Exception("Please provide a valid id")
+            }
+            //bookIdQuery.toIntOrNull()?.let { it1 -> bookService.deleteBook(it1) }
+            bookService.deleteBook(bookIdQuery.toIntOrNull()!!)
 
             call.respond(HttpStatusCode.OK, "Book Deleted Successfully")
         }
